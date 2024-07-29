@@ -1,0 +1,15 @@
+17.2303229402784		1	inital lambda [deg] (0/1 - fixed/free) 
+11.3574630280653		1	initial beta [deg] (0/1 - fixed/free)
+5.27025526586365		1	inital period [hours] (0/1 - fixed/free)
+-8.72644023942167e-10		1	inital YORP strength [rad/day^2] (0/1 - fixed/free)
+2451545.0			zero time [JD]
+32.64			initial rotation angle [deg]     
+0.1			convexity regularization      
+6 6			degree and order of spherical harmonics expansion
+8			number of rows        
+0.0409080879209923		0	phase funct. param. 'a' (0/1 - fixed/free)  
+0.147333874266145		0	phase funct. param. 'd' (0/1 - fixed/free) 
+-0.0274677165960076		0	phase funct. param. 'k' (0/1 - fixed/free) 
+0.0491178276609344		0	phase funct. param. 'b' (0/1 - fixed/free)
+0.149806457369683		0	Lambert coefficient 'c' (0/1 - fixed/free)      
+100			iteration stop condition
