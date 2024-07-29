@@ -3,7 +3,7 @@
 	get inversion results. This program is used for uncertainty estimation.
 
 	Syntax:
-		yorp lc input_parameter out_area out_par out_lcs yorp_chi2 nbootstrap nth
+		yorp_e lc input_parameter out_area out_par out_lcs yorp_chi2 nbootstrap nth
 
 */
 
@@ -67,7 +67,7 @@ int main(int argc, char** argv)
 {
 	if (argc < 6)
 	{
-		cout << "yorp lc input_parameter out_area out_par out_lcs yorp_chi2 nbootstrap nth" << endl;
+		cout << "yorp_e lc input_parameter out_area out_par out_lcs yorp_chi2 nbootstrap nth" << endl;
 		cout << "yorp_chi2: parameters and correlated chi2 file" << endl;
 		cout << "nbootstrap: bootstrap time, 8000+ would be great" << endl;
 		cout << "nth: count of thread to do this calculation" << endl;
