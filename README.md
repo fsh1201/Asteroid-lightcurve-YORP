@@ -1,1 +1,44 @@
 # Asteroid-lightcurve-YORP
+
+## Requirements
+
+gcc, g++, gfortran
+
+## Usage
+
+### Build
+
+    $ make
+
+### YORP Detection
+
+    $ yorp lc input_parameter out_area out_par out_lcs yorp_chi2
+**lc**: light curve file
+
+**input_parameter**: initial guesses of the spin state and YORP strength, degree and order of laplace series, scattering parameters, iteration stop condition. See **input_convexinv** for example
+
+**out_area**: areas and normal vectors
+
+**out_par**: spin parameters obtained by iteration
+
+**out_lcs**: output lightcurves
+
+**yorp_chi2**: lambda(deg) beta(deg) p(hour) yorp(rad/d^2) rchisq jd0(JD) phi0(deg) a d k b c
+
+### Uncertainty Estimation
+
+    $ yorp_e lc input_parameter out_area out_par out_lcs yorp_chi2 nbootstrap nth
+
+**nbootstrap**: bootstrap time, 8000+ would be great
+
+**nth**: count of thread to do this calculation
+
+### Areas to Shape
+
+    $ cat out_area | minkowski | standardtri > shape.txt
+
+    $ cat shape.txt | shape2obj > shape.obj
+
+or
+
+    $ cat out_area | minkowski | standardtri | shape2obj > shape.obj
