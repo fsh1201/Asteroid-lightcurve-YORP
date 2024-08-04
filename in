@@ -1,0 +1,17 @@
+-3.2293229402784 37.2313229402784		1	the range of initial lambda [deg] (0/1 - fixed/free) 
+-9.3574630280653 31.3574630280653		1	the range of initial beta [deg] (0/1 - fixed/free)
+5.2701 5.2703		1	the range of initial period [hours] (0/1 - fixed/free)
+-1.25e-9 0.4e-9		1	the range of initial YORP strength [rad/day^2] (0/1 - fixed/free)
+2451545.0			zero time [JD]
+32.64			initial rotation angle [deg]     
+0.1			convexity regularization      
+6 6			degree and order of spherical harmonics expansion
+8			number of rows        
+0.039 0.041		0	the range of phase funct. param. 'a' (0/1 - fixed/free)  
+0.146 0.150		0	the range of phase funct. param. 'd' (0/1 - fixed/free) 
+-0.028 -0.026		0	the range of phase funct. param. 'k' (0/1 - fixed/free) 
+1 1		0	the range of scattering param. 'b' (0/1 - fixed/free)
+0.05 0.40		0	the range of Lambert coefficient 'c' (0/1 - fixed/free)      
+100			iteration stop condition
+50			number of total random parameter sets
+10			number of threads
