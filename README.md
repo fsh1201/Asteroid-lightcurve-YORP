@@ -13,9 +13,9 @@ gcc, g++, gfortran
 ### YORP Detection
 
     $ yorp lc input_parameter out_area out_par out_lcs yorp_chi2
-**lc**: light curve file
+**lc**: light curve file, the same format as DAMIT
 
-**input_parameter**: initial guesses of the spin state and YORP strength, degree and order of laplace series, scattering parameters, iteration stop condition. See **input_convexinv** for example
+**input_parameter**: the range os initial guesses of the spin state and YORP strength, degree and order of laplace series, scattering parameters, iteration stop condition. See the file **in** for example
 
 **out_area**: areas and normal vectors
 
