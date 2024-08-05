@@ -39,4 +39,4 @@ shape2obj: shape2obj.cpp
 	$(CC) $(CFLAGS) -c $<
 
 clean:
-	rm -f *.o period_scan convexinv spin_axis yorp bootstrap yorp_e minkowski standardtri shape2obj 
+	rm -f *.o convexinv yorp bootstrap yorp_e minkowski standardtri shape2obj 
