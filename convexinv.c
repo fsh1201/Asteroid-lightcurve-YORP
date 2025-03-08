@@ -685,7 +685,8 @@ int main(int argc, char* argv[])
 			fprintf(stderr, "\nError: cannot open 'output par' file \n"); fflush(stdout); exit(2);
 		}
 		fprintf(f_par, "# lambda(deg) beta(deg) p(hour) yorp(rad/d^2) rchisq jd0(JD) phi0(deg) a d k b c\n");
-		fprintf(f_par, "%.15g %.15g %.15g %.15g %.15g ", cg[Ncoef + 2] * RAD2DEG, 90 - (cg[Ncoef + 1] * RAD2DEG), 24 * prd, cg[Ncoef + 4], rchisq);
+		fprintf(f_par, "%.15g %.15g %.15g %.15g %.15g ", fmod(cg[Ncoef + 2] * RAD2DEG + 720, 360), asin(sin(PI / 2. - cg[Ncoef + 1])) * RAD2DEG,
+			24 * prd, cg[Ncoef + 4], rchisq);
 		//fprintf(f_par, "%g %f\n", cg[Ncoef + 4], rchisq);
 		fprintf(f_par, "%.15g %.15g ", jd_0, Phi_0 * RAD2DEG);
 		for (i = 1; i <= Nphpar; i++)
@@ -694,7 +695,7 @@ int main(int argc, char* argv[])
 
 		fclose(f_par);
 	}
-
+	
 	return(0);
 }
 

@@ -3,7 +3,7 @@
 	get inversion results. This program is used for uncertainty estimation.
 
 	Syntax:
-		yorp_e lc input_parameter out_area out_par out_lcs yorp_chi2 nbootstrap nth
+		yorp_error_t lc input_parameter out_area out_par out_lcs yorp_chi2 nbootstrap nth
 
 */
 
@@ -33,38 +33,39 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <sstream>
 #include <vector>
 #include <fstream>
+#include "lData.h"
 
 using namespace std;
 
-vector<string> yorp(string lcFileName, string inputFileName, string areaFileName, string parFileName, string outlcFileName, int nth, int n, int dplc)
+vector<string> yorp(string lcFileName, string inputFileName, string areaFileName, string parFileName, string outlcFileName,
+	int ns, int ne)
 {
 	vector<string> vs;
-	for (int i = 0; i < n; i++)
+	for (int i = ns; i < ne; i++)
 	{
 		stringstream sscmd;
 		stringstream bslcFileName, area, par, outlc;
-		bslcFileName << lcFileName << "_bs_" << nth << "_" << i << ".txt";
-		area << areaFileName << "_bs_" << nth << "_" << i << ".txt";
-		par << parFileName << "_bs_" << nth << "_" << i << ".txt";
-		outlc << outlcFileName << "_bs_" << nth << "_" << i << ".txt";
-		if (dplc == 0)
-		{
-			sscmd << "./bootstrap " << lcFileName << " > " << bslcFileName.str();
-		}
-		else
-		{
-			sscmd << "./bootstraplc " << lcFileName << " > " << bslcFileName.str();
-		}
-		//cout << sscmd.str() << endl;
+		bslcFileName << lcFileName << "_fn_" << i << ".txt";
+		area << areaFileName << "_fn_" << i << ".txt";
+		par << parFileName << "_fn_" << i << ".txt";
+		outlc << outlcFileName << "_fn_" << i << ".txt";
+		sscmd << "./firstnlc " << lcFileName << " " << i << " > " << bslcFileName.str();
+		cout << sscmd.str() << endl;
 		system(sscmd.str().c_str());
+		lData ld(bslcFileName.str());
+		double jdx = ld.jdx();
 		sscmd = stringstream("");
-		sscmd << "cat " << bslcFileName.str() << " | ./convexinv -s -o " << area.str() << " -p " << par.str() << " " << inputFileName << " " << outlc.str();
-		//cout << sscmd.str() << endl;
+		sscmd << "cat " << bslcFileName.str() << " | ./convexinv -s -o " << area.str() << " -p " << par.str() << " "
+			<< inputFileName << " " << outlc.str();
+		cout << sscmd.str() << endl;
 		system(sscmd.str().c_str());
+		lData ldo(outlc.str());
+		double rms = ld.relative_rms(ldo);
 		fstream fp(par.str(), ios::in);
 		string line;
 		getline(fp, line);
 		getline(fp, line);
+		line += " " + to_string(jdx) + " " + to_string(rms);
 		vs.push_back(line);
 	}
 	return vs;
@@ -72,12 +73,10 @@ vector<string> yorp(string lcFileName, string inputFileName, string areaFileName
 
 int main(int argc, char** argv)
 {
-	if (argc < 10)
+	if (argc < 8)
 	{
-		cout << "yorp_e lc input_parameter out_area out_par out_lcs yorp_chi2 nbootstrap nth dplc" << endl;
+		cout << "yorp_error_t lc input_parameter out_area out_par out_lcs yorp_chi2 nth" << endl;
 		cout << "yorp_chi2: parameters and correlated chi2 file" << endl;
-		cout << "nbootstrap: bootstrap time, 8000+ would be great" << endl;
-		cout << "nth: count of thread to do this calculation" << endl;
 
 		exit(-1);
 	}
@@ -87,24 +86,40 @@ int main(int argc, char** argv)
 	string parFileName(argv[4]);
 	string outlcFileName(argv[5]);
 	string yorp_chi2FileName(argv[6]);
+
 	vector<future<vector<string>>> vfvs;
 	vector<vector<string>> vvs;
-	int bsn = stoi(argv[7]);
-	int nth = stoi(argv[8]);
-	int dplc = stoi(argv[9]);
+	
+	int nth = stoi(argv[7]);
+	lData ld(lcFileName);
+	int min_nlc = ld.min_nlc();
+	int bsn = ld.get_n() - min_nlc + 1;
 	int n = bsn / nth;
+	int nmod = bsn % nth;
+	int m = 0;
 	for (int i = 0; i < nth; i++)
 	{
-		vfvs.push_back(async(launch::async, [=]() {
-			return yorp(lcFileName, inputFileName, areaFileName, parFileName, outlcFileName, i, n, dplc);
-			}));
+		if (i < nmod)
+		{
+			vfvs.push_back(async(launch::async, [=]() {
+				return yorp(lcFileName, inputFileName, areaFileName, parFileName, outlcFileName, min_nlc + m, min_nlc + m + n + 1);
+				}));
+			m = m + n + 1;
+		}
+		else
+		{
+			vfvs.push_back(async(launch::async, [=]() {
+				return yorp(lcFileName, inputFileName, areaFileName, parFileName, outlcFileName, min_nlc + m, min_nlc + m + n);
+				}));
+			m = m + n;
+		}
 	}
 	for (int i = 0; i < nth; i++)
 	{
 		vvs.push_back(vfvs[i].get());
 	}
 	fstream yorpf(yorp_chi2FileName, ios::out);
-	yorpf << "# lambda(deg) beta(deg) p(hour) yorp(rad/d^2) rchisq jd0(JD) phi0(deg) a d k b c" << endl;
+	yorpf << "# lambda(deg) beta(deg) p(hour) yorp(rad/d^2) rchisq jd0(JD) phi0(deg) a d k b c jdx rms" << endl;
 	for (auto i : vvs)
 	{
 		for (auto j : i)

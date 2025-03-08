@@ -10,7 +10,7 @@ MY_LIBS=trifac.o areanorm.o sphfunc.o ellfit.o covsrt.o ludcmp.o lubksb.o mrqmin
         curv.o blmatrix.o conv.o gauss.o phasec.o matrix.o bright.o memory.o\
 	dot_product.o
 
-all: convexinv yorp bootstrap yorp_e minkowski standardtri shape2obj
+all: convexinv yorp bootstrap bootstraplc firstnlc yorp_e minkowski standardtri shape2obj yorp_d_e yorp_simplex yorp_error_t
 
 libs: $(MY_LIBS)
 
@@ -23,8 +23,23 @@ yorp: yorp.cpp
 bootstrap: bootstrap.cpp lData.cpp lightCurve.cpp dataPoint.cpp point.cpp
 	g++ $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
+bootstraplc: bootstraplc.cpp lData.cpp lightCurve.cpp dataPoint.cpp point.cpp
+	g++ $(CFLAGS) -o $@ $^ $(LDFLAGS)
+
+firstnlc: firstnlc.cpp lData.cpp lightCurve.cpp dataPoint.cpp point.cpp
+	g++ $(CFLAGS) -o $@ $^ $(LDFLAGS)
+
 yorp_e: yorp_e.cpp
 	g++ yorp_e.cpp -g -std=c++11 -o yorp_e -lpthread
+
+yorp_d_e: yorp_d_e.cpp
+	g++ yorp_d_e.cpp -g -std=c++11 -o yorp_d_e
+
+yorp_simplex: yorp_simplex.cpp
+	g++ yorp_simplex.cpp -g -std=c++11 -o yorp_simplex
+
+yorp_error_t: yorp_error_t.cpp lData.cpp lightCurve.cpp dataPoint.cpp point.cpp
+	g++ $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
 minkowski: minkowski.f
 	gfortran ./minkowski.f  -o minkowski
@@ -39,4 +54,4 @@ shape2obj: shape2obj.cpp
 	$(CC) $(CFLAGS) -c $<
 
 clean:
-	rm -f *.o convexinv yorp bootstrap yorp_e minkowski standardtri shape2obj 
+	rm -f *.o convexinv yorp bootstrap bootstraplc firstnlc yorp_e minkowski standardtri shape2obj yorp_d_e yorp_simplex yorp_error_t

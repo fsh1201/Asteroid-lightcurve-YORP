@@ -36,6 +36,12 @@ public:
 	lData separate_day(const lData& ld);
 	lData all_data();
 	lData bootstrap(int num = 0);
+	lData bootstraplc(int num = 0);
+	lData firstn(int n = 1);
+	int min_nlc(int n = 100);
+	double jd0();
+	double jdn();
+	double jdx();
 };
 
 std::pair<double, double> period_t(std::vector<std::vector<double>> vvlc, double s = 0.02, double e = 1.6, double step = 1e-6, int m = 8);

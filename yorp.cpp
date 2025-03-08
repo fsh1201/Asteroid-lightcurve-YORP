@@ -66,6 +66,7 @@ int rows = 8;
 double stopcondition = 100;
 int fflambda = 1, ffbeta = 1, ffp = 1, ffnu = 1, ffa = 0, ffd = 0, ffk = 0, ffb = 0, ffc = 0;	//fixed (0) or free (1)
 int ntotal = 1000, nth = 40;
+int nbootstrap = 10000, nbsth = 40;
 
 vector<string> yorp(string lcFileName, string inputFileName, string areaFileName, string parFileName, string outlcFileName,
 	vector<double> vlambda, vector<double> vbeta, vector<double> vP, vector<double> vnu, int nt)
@@ -124,6 +125,7 @@ vector<string> yorp(string lcFileName, string inputFileName, string areaFileName
 		parFile = fstream(ssParFileName.str(), ios::in);
 		getline(parFile, line);
 		getline(parFile, line);
+		line += " " + to_string(nt) + " " + to_string(i);
 		vs.push_back(line);
 	}
 	return vs;
@@ -184,7 +186,7 @@ int main(int argc, char** argv)
 	}
 
 	fstream yorpFile(yorp_chi2FileName, ios::out);
-	yorpFile << "# lambda(deg) beta(deg) p(hour) yorp(rad/d^2) rchisq jd0(JD) phi0(deg) a d k b c" << endl;
+	yorpFile << "# lambda(deg) beta(deg) p(hour) yorp(rad/d^2) rchisq jd0(JD) phi0(deg) a d k b c nt i" << endl;
 
 	int n = ntotal / nth;
 

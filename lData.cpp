@@ -325,3 +325,75 @@ lData lData::bootstrap(int num)
 	ldnew.normalize(normal::mean);
 	return ldnew;
 }
+
+lData lData::bootstraplc(int num)
+{
+	unsigned seed = chrono::system_clock::now().time_since_epoch().count();
+	default_random_engine gen(seed);
+	uniform_int_distribution<int> disn(0, n - 1);
+	lData ldnew;
+	int nn = n;
+	if (num > 0)
+		nn = num;
+	ldnew.n = nn;
+	for (int i = 0; i < nn; i++)
+	{
+		int x = disn(gen);
+		ldnew.vlc.push_back(vlc[x]);
+	}
+
+	return ldnew;
+}
+
+lData lData::firstn(int n)
+{
+	lData nldata(*this);
+	nldata.n = n;
+	nldata.vlc = vector<lightCurve>(vlc.begin(), vlc.begin() + n);
+
+	return nldata;
+}
+
+int lData::min_nlc(int n)
+{
+	int m = 0;
+	for (int i = 0; i < n; i++)
+	{
+		m += vlc[i].length;
+		if (m >= n)
+			return i + 1;
+	}
+}
+
+double lData::jd0()
+{
+	double jd = 1e26;
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = 0; j < vlc[i].length; j++)
+		{
+			jd = jd < vlc[i][j].time ? jd : vlc[i][j].time;
+		}
+	}
+
+	return jd;
+}
+
+double lData::jdn()
+{
+	double jd = -1e26;
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = 0; j < vlc[i].length; j++)
+		{
+			jd = jd > vlc[i][j].time ? jd : vlc[i][j].time;
+		}
+	}
+
+	return jd;
+}
+
+double lData::jdx()
+{
+	return jdn() - jd0();
+}

@@ -13,5 +13,8 @@
 1 1		0	the range of scattering param. 'b' (0/1 - fixed/free)
 0.05 0.40		0	the range of Lambert coefficient 'c' (0/1 - fixed/free)      
 100			iteration stop condition
-50			number of total random parameter sets
+20			number of total random parameter sets
 10			number of threads
+20		number of bootstrap
+10			number of bootstrap threads
+1			resample datapoints (0) or lightcurve (1)
