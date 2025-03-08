@@ -15,7 +15,7 @@ gcc, g++, gfortran
     $ yorp lc input_parameter out_area out_par out_lcs yorp_chi2
 **lc**: light curve file, the same format as DAMIT, see an [example lc](https://astro.troja.mff.cuni.cz/projects/damit/LightCurves/exportAllForAsteroid/208/plaintext/A208.lc.txt), and the [doc](https://github.com/fsh1201/Asteroid-lightcurve-YORP/blob/main/convexinv_doc.pdf)
 
-**input_parameter**: the range of initial guesses of the spin state and YORP strength, degree and order of laplace series, scattering parameters, iteration stop condition. See the file [in](https://github.com/fsh1201/Asteroid-lightcurve-YORP/blob/main/in) for example
+**input_parameter**: the range of initial guesses of the spin state and YORP strength, degree and order of laplace series, scattering parameters, iteration stop condition. See the file [in](https://github.com/fsh1201/Asteroid-lightcurve-YORP/blob/main/in) for an example
 
 **out_area**: areas and normal vectors
 
@@ -41,7 +41,7 @@ gcc, g++, gfortran
 
 **lcpath**: the path of light curve file
 
-**parameter**: the path of input parameters, a example see [in](https://github.com/fsh1201/Asteroid-lightcurve-YORP/blob/main/in)
+**parameter**: the path of input parameters, an example see [in](https://github.com/fsh1201/Asteroid-lightcurve-YORP/blob/main/in)
 
 ### Areas to Shape
 
